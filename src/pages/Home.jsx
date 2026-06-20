@@ -1,0 +1,189 @@
+import React, { useEffect, useState } from 'react';
+import BlogCard from '../components/BlogCard';
+import Sidebar from '../components/Sidebar';
+import { fetchPosts } from '../api';
+import SEO from '../components/SEO';
+
+function Home() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [activeTag, setActiveTag] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    loadPosts(currentPage);
+  }, [currentPage]);
+
+  const loadPosts = async (page) => {
+    setLoading(true);
+    try {
+      const data = await fetchPosts(page);
+      if (data.posts) {
+        setPosts(data.posts);
+        setTotalPages(data.pages || 1);
+      }
+    } catch {
+      setPosts([]);
+    }
+    setLoading(false);
+  };
+
+  const allTags = [...new Set(posts.map((p) => p.category).filter(Boolean))];
+
+  const filtered = posts.filter((p) => {
+    const matchSearch =
+      !search ||
+      p.title?.toLowerCase().includes(search.toLowerCase()) ||
+      p.excerpt?.toLowerCase().includes(search.toLowerCase()) ||
+      p.category?.toLowerCase().includes(search.toLowerCase());
+    const matchTag = !activeTag || p.category === activeTag;
+    return matchSearch && matchTag;
+  });
+
+  const handleTagClick = (tag) => {
+    setActiveTag((prev) => (prev === tag ? '' : tag));
+    setSearch('');
+  };
+
+  // inside return, before the first div:
+  <SEO
+    title='Home'
+    description='Discover the best digital tools, SaaS products, AI tools and more. Honest reviews and recommendations from Softprofit Hub.'
+    keywords='digital products, ai tools, saas, e-learning, marketing tools'
+    url='/'
+  />;
+
+  return (
+    <div>
+      {/* Search Bar */}
+      <div className='search-bar-wrap'>
+        <div className='search-bar-inner'>
+          <input
+            type='text'
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setActiveTag('');
+            }}
+            placeholder='🔍  Search posts by title, category or keyword...'
+            className='search-bar-input'
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className='search-clear'>
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Tag Filter Pills */}
+        {allTags.length > 0 && (
+          <div className='tag-filter-row'>
+            <span className='tag-filter-label'>Filter by:</span>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`tag-filter-pill ${activeTag === tag ? 'active' : ''}`}
+              >
+                {tag}
+              </button>
+            ))}
+            {activeTag && (
+              <button
+                onClick={() => setActiveTag('')}
+                className='tag-filter-clear'
+              >
+                ✕ Clear filter
+              </button>
+            )}
+          </div>
+        )}
+
+        {(search || activeTag) && (
+          <p className='search-results-count'>
+            {filtered.length} result{filtered.length !== 1 ? 's' : ''}
+            {activeTag ? (
+              <>
+                {' '}
+                in <strong>{activeTag}</strong>
+              </>
+            ) : (
+              ''
+            )}
+            {search ? (
+              <>
+                {' '}
+                for "<strong>{search}</strong>"
+              </>
+            ) : (
+              ''
+            )}
+          </p>
+        )}
+      </div>
+
+      <div className='page-layout'>
+        <main>
+          {loading ? (
+            <p className='loading'>Loading posts...</p>
+          ) : filtered.length === 0 ? (
+            <div className='no-results'>
+              <p>
+                😕 No posts found{activeTag ? ` in "${activeTag}"` : ''}
+                {search ? ` for "${search}"` : ''}
+              </p>
+              <button
+                onClick={() => {
+                  setSearch('');
+                  setActiveTag('');
+                }}
+                className='read-more'
+                style={{ marginTop: 12 }}
+              >
+                Clear Filters
+              </button>
+            </div>
+          ) : (
+            filtered.map((post) => <BlogCard key={post.id} post={post} />)
+          )}
+
+          {/* Pagination — only show when no filters active */}
+          {!search && !activeTag && totalPages > 1 && (
+            <div className='pagination'>
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    className={currentPage === page ? 'active' : ''}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Next &gt;&gt;
+              </button>
+            </div>
+          )}
+        </main>
+        <Sidebar onTagClick={handleTagClick} activeTag={activeTag} />
+      </div>
+    </div>
+  );
+}
+
+export default Home;

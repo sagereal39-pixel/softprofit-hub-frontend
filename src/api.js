@@ -98,7 +98,7 @@ export const fetchAdminStats = async (token) => {
 export const uploadImage = async (file, token) => {
   const formData = new FormData();
   formData.append('image', file);
-  const res = await fetch('http://localhost:5001/api/upload.php', {
+    const res = await fetch(`${BASE_URL}/upload.php`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData,

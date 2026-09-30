@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+
 function Sidebar({ onTagClick, activeTag }) {
   const [popularPosts, setPopularPosts] = useState([]);
   const [tags, setTags] = useState([]);
@@ -14,7 +16,7 @@ function Sidebar({ onTagClick, activeTag }) {
 
   useEffect(() => {
     // Fetch popular posts sorted by views
-    fetch('http://localhost:5001/api/posts/popular')
+    fetch(`${BASE_URL}/posts/popular`)
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setPopularPosts(data);
@@ -22,7 +24,7 @@ function Sidebar({ onTagClick, activeTag }) {
       .catch(() => {});
 
     // Fetch tags from all posts
-    fetch('http://localhost:5001/api/posts')
+    fetch(`${BASE_URL}/posts`)
       .then((r) => r.json())
       .then((data) => {
         if (data.posts) {

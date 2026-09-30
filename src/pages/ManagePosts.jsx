@@ -7,6 +7,8 @@ import {
   updatePost,
   uploadImage,
 } from '../api';
+
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -43,7 +45,7 @@ function ManagePosts() {
   const loadPosts = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/admin/posts', {
+      const res = await fetch(`${BASE_URL}/admin/posts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const adminPosts = await res.json();

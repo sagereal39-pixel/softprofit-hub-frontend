@@ -7,10 +7,10 @@ import {
   updatePost,
   uploadImage,
 } from '../api';
-
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 function ManagePosts() {
   const [allPosts, setAllPosts] = useState([]);

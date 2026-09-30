@@ -10,6 +10,8 @@ import {
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+// build fix'
+
 const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 function ManagePosts() {

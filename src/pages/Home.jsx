@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import BlogCard from '../components/BlogCard';
 import Sidebar from '../components/Sidebar';
 import { fetchPosts } from '../api';
@@ -9,11 +10,14 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTag, setActiveTag] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     loadPosts(currentPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   const loadPosts = async (page) => {
@@ -28,6 +32,10 @@ function Home() {
       setPosts([]);
     }
     setLoading(false);
+  };
+
+  const goToPage = (page) => {
+    setSearchParams({ page: String(page) });
   };
 
   const allTags = [...new Set(posts.map((p) => p.category).filter(Boolean))];
@@ -153,7 +161,7 @@ function Home() {
           {!search && !activeTag && totalPages > 1 && (
             <div className='pagination'>
               <button
-                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                onClick={() => goToPage(Math.max(currentPage - 1, 1))}
                 disabled={currentPage === 1}
               >
                 Previous
@@ -163,16 +171,14 @@ function Home() {
                   <button
                     key={page}
                     className={currentPage === page ? 'active' : ''}
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => goToPage(page)}
                   >
                     {page}
                   </button>
                 ),
               )}
               <button
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(p + 1, totalPages))
-                }
+                onClick={() => goToPage(Math.min(currentPage + 1, totalPages))}
                 disabled={currentPage === totalPages}
               >
                 Next &gt;&gt;

@@ -395,6 +395,27 @@ body {
   flex-shrink: 0;
 }
 
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-sidebar-toggle {
+  display: none; /* shown only at mobile widths, see media query below */
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.admin-sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .admin-sidebar-brand {
   padding: 0 24px 24px;
   border-bottom: 1px solid #333;
@@ -1063,14 +1084,47 @@ body {
 
   .admin-sidebar {
     width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding: 12px;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .admin-sidebar-header {
+    width: 100%;
+  }
+
+  .admin-sidebar-brand {
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .admin-sidebar-toggle {
+    display: block;
+  }
+
+  /* Collapsed by default on mobile; .open expands it. Animated via
+     max-height, same pattern as the main navbar's mobile menu. */
+  .admin-sidebar-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms ease, margin-top 400ms ease;
+    margin-top: 0;
+  }
+
+  .admin-sidebar-menu.open {
+    max-height: 500px;
+    margin-top: 16px;
   }
 
   .admin-nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
   }
 
   .admin-grid-2 {

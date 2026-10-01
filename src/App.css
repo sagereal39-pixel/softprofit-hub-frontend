@@ -1722,18 +1722,29 @@ body {
   color: #111;
 }
 
+/* Always rendered in the DOM now; open/closed is controlled purely by
+   max-height so both opening AND closing can animate (display:none can't
+   transition, so we no longer use display to show/hide this menu). */
 .navbar-mobile {
-  display: none;
+  display: none; /* overridden to flex at mobile widths below */
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background: #fff;
   border-bottom: 1px solid #ddd;
-  padding: 12px 24px;
   flex-direction: column;
   gap: 4px;
   z-index: 200;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 24px;
+  transition: max-height 400ms ease, padding 400ms ease;
+}
+
+.navbar-mobile.open {
+  max-height: 300px;
+  padding: 12px 24px;
 }
 
 .navbar-mobile-link {
@@ -1757,8 +1768,14 @@ body {
 
   .navbar-hamburger {
     display: block;
+    position: absolute;
+    top: 16px;
+    right: 16px;
   }
 
+  /* .navbar-mobile stays display:flex at all times now (base rule below
+     overrides the desktop display:none); visibility is handled entirely
+     by the .open class's max-height, so it can animate both ways. */
   .navbar-mobile {
     display: flex;
   }

@@ -43,25 +43,26 @@ function Navbar() {
       <button
         className='navbar-hamburger'
         onClick={() => setMenuOpen(!menuOpen)}
+        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={menuOpen}
       >
         {menuOpen ? '✕' : '☰'}
       </button>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className='navbar-mobile'>
-          {links.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className='navbar-mobile-link'
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* Mobile Menu — always rendered so closing can animate too;
+          visibility/height is controlled purely by CSS classes. */}
+      <div className={`navbar-mobile ${menuOpen ? 'open' : ''}`}>
+        {links.map((link) => (
+          <Link
+            key={link.path}
+            to={link.path}
+            className='navbar-mobile-link'
+            onClick={() => setMenuOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
     </nav>
   );
 }

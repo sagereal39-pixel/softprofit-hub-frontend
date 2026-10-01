@@ -563,6 +563,26 @@ body {
   border-bottom: none;
 }
 
+/* Truncate long text with an ellipsis instead of letting it overflow into
+   neighboring columns. Hover/long-press shows the full text via the
+   native title tooltip. Scoped to specific columns only — other tables
+   and columns are unaffected. */
+.truncate {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.truncate-post {
+  max-width: 140px;
+}
+
+.truncate-comment {
+  max-width: 220px;
+}
+
 /* STATUS BADGES */
 .status-badge {
   padding: 3px 10px;

@@ -92,13 +92,15 @@ function ManageComments() {
                   <tr key={c.id}>
                     <td style={{ fontWeight: 600 }}>{c.name}</td>
                     <td style={{ fontSize: 12, color: '#888' }}>{c.email}</td>
-                    <td style={{ fontSize: 12, color: '#555' }}>
-                      {c.post_title}
+                    <td className='col-post' style={{ fontSize: 12, color: '#555' }}>
+                      <span className='truncate truncate-post' title={c.post_title}>
+                        {c.post_title}
+                      </span>
                     </td>
-                    <td style={{ fontSize: 13, maxWidth: 220 }}>
-                      {c.content.length > 80
-                        ? c.content.substring(0, 80) + '...'
-                        : c.content}
+                    <td className='col-comment' style={{ fontSize: 13 }}>
+                      <span className='truncate truncate-comment' title={c.content}>
+                        {c.content}
+                      </span>
                     </td>
                     <td>
                       <span

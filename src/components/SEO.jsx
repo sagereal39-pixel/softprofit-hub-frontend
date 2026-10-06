@@ -11,13 +11,15 @@ function SEO({
   author = 'Softprofit Hub',
 }) {
   const siteName = 'Softprofit Hub';
-  const defaultDescription = 'Your trusted guide to the best digital products, tools and software on the internet.';
-  const defaultImage = 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80';
-  const siteUrl = 'https://softprofithub.com'; // change to your domain when deploying
+  const defaultDescription =
+    'Your trusted guide to the best digital products, tools and software on the internet.';
+  // Use the real deployed URL (set REACT_APP_SITE_URL once a custom domain exists)
+  const siteUrl =
+    process.env.REACT_APP_SITE_URL || 'https://softprofit-hub-frontend.vercel.app';
 
   const fullTitle = title ? `${title} | ${siteName}` : siteName;
   const metaDesc = description || defaultDescription;
-  const metaImage = image || defaultImage;
+  const metaImage = image || null; // omit og:image entirely rather than risk a dead external link
   const metaUrl = url ? `${siteUrl}${url}` : siteUrl;
 
   return (
@@ -34,7 +36,7 @@ function SEO({
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={metaDesc} />
-      <meta property="og:image" content={metaImage} />
+      {metaImage && <meta property="og:image" content={metaImage} />}
       <meta property="og:url" content={metaUrl} />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content="en_US" />
@@ -43,7 +45,7 @@ function SEO({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDesc} />
-      <meta name="twitter:image" content={metaImage} />
+      {metaImage && <meta name="twitter:image" content={metaImage} />}
       <meta name="twitter:site" content="@softprofithub" />
 
       {/* Article specific */}

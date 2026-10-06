@@ -22,11 +22,12 @@ function PostPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  // inside the component, add:
+  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
+    setImgError(false);
     fetchPost(slug)
       .then((data) => {
         if (data && data.id) {
@@ -74,28 +75,32 @@ function PostPage() {
       </div>
     );
 
-    <SEO
-      title={post.meta_title || post.title}
-      description={post.meta_description || post.excerpt}
-      keywords={post.meta_keywords}
-      image={post.featured_image}
-      url={`/blog/${post.slug}`}
-      type='article'
-      author={post.author}
-    />;
-
-  const placeholders = [
-    'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800',
-    'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800',
-    'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800',
-  ];
-  const image = post.featured_image || placeholders[post.id % 3];
+  const hasImage = Boolean(post.featured_image) && !imgError;
 
   return (
     <div className='page-layout'>
+      <SEO
+        title={post.meta_title || post.title}
+        description={post.meta_description || post.excerpt}
+        keywords={post.meta_keywords}
+        image={post.featured_image}
+        url={`/blog/${post.slug}`}
+        type='article'
+        author={post.author}
+      />
       <main>
         <div className='blog-card'>
-          <img src={image} alt={post.title} />
+          {hasImage ? (
+            <img
+              src={post.featured_image}
+              alt={post.title}
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className='blog-card-placeholder' aria-hidden='true'>
+              <span>{post.category || 'Softprofit Hub'}</span>
+            </div>
+          )}
           <div className='blog-card-body'>
             <span className='post-category'>{post.category}</span>
             <h1 className='post-title'>{post.title}</h1>

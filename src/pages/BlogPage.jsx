@@ -50,16 +50,14 @@ function BlogPage() {
     return matchSearch && matchTag;
   });
 
-  // inside return:
-  <SEO
-    title='Blog'
-    description='In-depth reviews, comparisons and guides on the best digital products and tools.'
-    keywords='blog, digital products, software reviews, ai tools'
-    url='/blog'
-  />;
-
   return (
     <div>
+      <SEO
+        title='Blog'
+        description='In-depth reviews, comparisons and guides on the best digital products and tools.'
+        keywords='blog, digital products, software reviews, ai tools'
+        url='/blog'
+      />
       {/* Hero */}
       <div className='page-hero'>
         <div className='page-hero-inner'>

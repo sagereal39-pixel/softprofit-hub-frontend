@@ -55,16 +55,14 @@ function Home() {
     setSearch('');
   };
 
-  // inside return, before the first div:
-  <SEO
-    title='Home'
-    description='Discover the best digital tools, SaaS products, AI tools and more. Honest reviews and recommendations from Softprofit Hub.'
-    keywords='digital products, ai tools, saas, e-learning, marketing tools'
-    url='/'
-  />;
-
   return (
     <div>
+      <SEO
+        title='Home'
+        description='Discover the best digital tools, SaaS products, AI tools and more. Honest reviews and recommendations from Softprofit Hub.'
+        keywords='digital products, ai tools, saas, e-learning, marketing tools'
+        url='/'
+      />
       {/* Search Bar */}
       <div className='search-bar-wrap'>
         <div className='search-bar-inner'>
